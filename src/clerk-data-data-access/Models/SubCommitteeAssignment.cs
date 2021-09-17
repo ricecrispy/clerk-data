@@ -1,8 +1,12 @@
-﻿namespace clerk_data_data_access.Models
+﻿using System;
+using System.Xml.Serialization;
+
+namespace clerk_data_data_access.Models
 {
-    public class SubCommitteeAssignment
+    [Serializable]
+    public class SubCommitteeAssignment : CommitteeAssignment
     {
-        public Committee Committee { get; set; }
-        public int Rank { get; set; }
+        [XmlAttribute("subcomcode")]
+        public string SubCommitteeCode { get; set; }
     }
 }

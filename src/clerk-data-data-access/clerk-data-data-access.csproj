@@ -5,8 +5,4 @@
     <RootNamespace>clerk_data_data_access</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Repository\" />
-  </ItemGroup>
-
 </Project>

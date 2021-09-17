@@ -1,32 +1,57 @@
 ﻿using clerk_data_data_access.Enums;
 using System;
+using System.Xml.Serialization;
 
 namespace clerk_data_data_access.Models
 {
+    [Serializable]
     public class MemberInfo
     {
+        [XmlElement(ElementName = "bioguideID")]
         public string BioGuideId { get; set; }
+        [XmlElement(ElementName = "lastname")]
         public string LastName { get; set; }
+        [XmlElement(ElementName = "firstname")]
         public string FirstName { get; set; }
+        [XmlElement(ElementName = "middlename")]
         public string MiddleName { get; set; }
+        [XmlElement(ElementName = "suffix")]
         public string Suffix { get; set; }
+        [XmlElement(ElementName = "courtesy")]
         public string Courtesy { get; set; }
-        public string NameList { get { return $"{LastName}, {FirstName}"; } }
-        public string SortName { get { return $"{LastName},{FirstName}".ToUpper(); } }
-        public string OfficialName { get; set; } // FirstName MiddleName LastName, Suffix
-        public string FormalName { get; set; } // can be anything i.e. Mr. Lawson of Florida
+        [XmlElement(ElementName = "namelist")]
+        public string NameList { get; set; }
+        [XmlElement(ElementName = "sort-name")]
+        public string SortName { get; set; }
+        [XmlElement(ElementName = "official-name")]
+        public string OfficialName { get; set; }
+        [XmlElement(ElementName = "formal-name")]
+        public string FormalName { get; set; }
+        [XmlElement(ElementName = "prior-congress")]
         public int PriorCongress { get; set; }
-        public PoliticalParty Party { get; set; }
-        public PoliticalParty Caucus { get; set; }
+        [XmlElement(ElementName = "party")]
+        public string Party { get; set; }
+        [XmlElement(ElementName = "caucus")]
+        public string Caucus { get; set; }
+        [XmlElement(ElementName = "state")]
         public State State { get; set; }
+        [XmlElement(ElementName = "district")]
         public string District { get; set; }
+        [XmlElement(ElementName = "townname")]
         public string TownName { get; set; }
+        [XmlElement(ElementName = "office-building")]
         public string OfficeBuilding { get; set; }
+        [XmlElement(ElementName = "office-room")]
         public int OfficeRoom { get; set; }
-        public int OfficeZip { get; set; }
-        public int OfficeZipSuffix { get; set; }
+        [XmlElement(ElementName = "office-zip")]
+        public string OfficeZip { get; set; }
+        [XmlElement(ElementName = "office-zip-suffix")]
+        public string OfficeZipSuffix { get; set; }
+        [XmlElement(ElementName = "phone")]
         public string PhoneNumber { get; set; }
-        public DateTime ElectedDate { get; set; }
-        public DateTime SwornDate { get; set; }
+        [XmlElement(ElementName = "elected-date")]
+        public string ElectedDate { get; set; }
+        [XmlElement(ElementName = "sworn-date")]
+        public string SwornDate { get; set; }
     }
 }
