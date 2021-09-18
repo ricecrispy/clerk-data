@@ -1,7 +1,7 @@
 ﻿using clerk_data_data_access.Factory;
 using clerk_data_data_access.FluentMap;
 using clerk_data_data_access.Models;
-using clerk_data_data_access.ParemterModels.Committee;
+using clerk_data_data_access.ParameterModel.Committee;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -50,7 +50,7 @@ namespace clerk_data_data_access.Repository
                         };
 
                         await connection.QueryAsync(
-                            "clerkdata.udf_create_committee",
+                            "info.udf_create_committee",
                             parameters,
                             commandTimeout: _connectionFactory.CommandTimeout,
                             commandType: CommandType.StoredProcedure);
@@ -71,7 +71,7 @@ namespace clerk_data_data_access.Repository
                             };
 
                             await connection.QueryAsync(
-                                "clerkdata.udf_create_sub_committee",
+                                "info.udf_create_sub_committee",
                                 subCommParameters,
                                 commandTimeout: _connectionFactory.CommandTimeout,
                                 commandType: CommandType.StoredProcedure);
@@ -83,7 +83,7 @@ namespace clerk_data_data_access.Repository
                             };
 
                             await connection.QueryAsync(
-                                "clerkdata.udf_committee_associate_sub_committee",
+                                "data.udf_committee_associate_sub_committee",
                                 associationParameters,
                                 commandTimeout: _connectionFactory.CommandTimeout,
                                 commandType: CommandType.StoredProcedure);
@@ -104,7 +104,7 @@ namespace clerk_data_data_access.Repository
         {
             using var connection = _connectionFactory.GetDataBaseConnection();
             return await connection.QueryAsync<Committee>(
-                "clerkdata.udf_select_committees",
+                "info.udf_select_committees",
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
         }
@@ -134,7 +134,7 @@ namespace clerk_data_data_access.Repository
                         };
 
                         await connection.QueryAsync(
-                            "clerkdata.udf_update_committee",
+                            "info.udf_update_committee",
                             parameters,
                             commandTimeout: _connectionFactory.CommandTimeout,
                             commandType: CommandType.StoredProcedure);
@@ -155,7 +155,7 @@ namespace clerk_data_data_access.Repository
                             };
 
                             await connection.QueryAsync(
-                                "clerkdata.udf_update_sub_committee",
+                                "info.udf_update_sub_committee",
                                 subCommParameters,
                                 commandTimeout: _connectionFactory.CommandTimeout,
                                 commandType: CommandType.StoredProcedure);
@@ -193,7 +193,7 @@ namespace clerk_data_data_access.Repository
 
             using var connection = _connectionFactory.GetDataBaseConnection();
             return await connection.QuerySingleOrDefaultAsync<Committee>(
-                "clerkdata.udf_select_committee_by_committee_code",
+                "info.udf_select_committee_by_committee_code",
                 parameters,
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);

@@ -21,5 +21,11 @@
     <ProjectReference Include="..\clerk-data-data-access\clerk-data-data-access.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="clerk-data-service.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>

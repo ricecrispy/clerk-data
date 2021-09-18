@@ -17,9 +17,9 @@ namespace clerk_data_data_access.Models
         [XmlAttribute("com-header-text")]
         public string HeaderText { get; set; }
         [XmlAttribute("com-zip")]
-        public int Zip { get; set; }
+        public string Zip { get; set; }
         [XmlAttribute("com-zip-suffix")]
-        public int ZipSuffix { get; set; }
+        public string ZipSuffix { get; set; }
         [XmlAttribute("com-building-code")]
         public string BuildingCode { get; set; }
         [XmlAttribute("com-phone")]

@@ -13,9 +13,9 @@ namespace clerk_data_data_access.Models
         [XmlAttribute("subcom-room")]
         public string SubComRoom { get; set; }
         [XmlAttribute("subcom-zip")]
-        public int SubComZip { get; set; }
+        public string SubComZip { get; set; }
         [XmlAttribute("subcom-zip-suffix")]
-        public int SubComZipSuffix { get; set; }
+        public string SubComZipSuffix { get; set; }
         [XmlAttribute("subcom-building-code")]
         public string SubComBuildingCode { get; set; }
         [XmlAttribute("subcom-phone")]

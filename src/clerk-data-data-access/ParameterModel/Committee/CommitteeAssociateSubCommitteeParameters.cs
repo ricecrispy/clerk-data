@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace clerk_data_data_access.ParemterModels.Committee
+namespace clerk_data_data_access.ParameterModel.Committee
 {
     internal class CommitteeAssociateSubCommitteeParameters
     {

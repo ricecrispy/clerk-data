@@ -1,7 +1,7 @@
 ﻿using clerk_data_data_access.Factory;
 using clerk_data_data_access.FluentMap;
 using clerk_data_data_access.Models;
-using clerk_data_data_access.ParemterModels.MemberData;
+using clerk_data_data_access.ParameterModel.MemberData;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -35,7 +35,7 @@ namespace clerk_data_data_access.Repository
 
             using var connection = _connectionFactory.GetDataBaseConnection();
             await connection.QueryAsync(
-                "clerkdata.udf_associate_committee_memberdata",
+                "data.udf_associate_committee_memberdata",
                 parameters,
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
@@ -51,7 +51,7 @@ namespace clerk_data_data_access.Repository
 
             using var connection = _connectionFactory.GetDataBaseConnection();
             await connection.QueryAsync(
-                "clerkdata.udf_associate_member_memberdata",
+                "data.udf_associate_member_memberdata",
                 parameters,
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
@@ -73,7 +73,7 @@ namespace clerk_data_data_access.Repository
 
             using var connection = _connectionFactory.GetDataBaseConnection();
             await connection.QueryAsync(
-                "clerkdata.udf_create_memberdata",
+                "info.udf_create_memberdata",
                 parameters,
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
@@ -89,7 +89,7 @@ namespace clerk_data_data_access.Repository
 
             using var connection = _connectionFactory.GetDataBaseConnection();
             return await connection.QuerySingleOrDefaultAsync<MemberData>(
-                "clerkdata.udf_select_memberdata_by_congress_num_and_session",
+                "info.udf_select_memberdata_by_congress_num_and_session",
                 parameters,
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
@@ -99,7 +99,7 @@ namespace clerk_data_data_access.Repository
         {
             using var connection = _connectionFactory.GetDataBaseConnection();
             return await connection.QueryAsync<MemberData>(
-                "clerkdata.udf_select_memberdata",
+                "info.udf_select_memberdata",
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
         }

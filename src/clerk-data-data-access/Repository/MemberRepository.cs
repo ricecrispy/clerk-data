@@ -1,7 +1,7 @@
 ﻿using clerk_data_data_access.Factory;
 using clerk_data_data_access.FluentMap;
 using clerk_data_data_access.Models;
-using clerk_data_data_access.ParemterModels.Member;
+using clerk_data_data_access.ParameterModel.Member;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -63,7 +63,7 @@ namespace clerk_data_data_access.Repository
                         };
 
                         await connection.QueryAsync(
-                            "clerkdata.udf_create_member",
+                            "info.udf_create_member",
                             parameters,
                             commandTimeout: _connectionFactory.CommandTimeout,
                             commandType: CommandType.StoredProcedure);
@@ -85,7 +85,7 @@ namespace clerk_data_data_access.Repository
                             };
 
                             await connection.QueryAsync(
-                                "clerkdata.udf_associate_member_committeeAssignment",
+                                "data.udf_associate_member_committeeAssignment",
                                 associationParmaters,
                                 commandTimeout: _connectionFactory.CommandTimeout,
                                 commandType: CommandType.StoredProcedure);
@@ -116,7 +116,7 @@ namespace clerk_data_data_access.Repository
 
             using var connection = _connectionFactory.GetDataBaseConnection();
             return await connection.QuerySingleOrDefaultAsync<Member>(
-                "clerkdata.udf_select_member_by_bioguide_id",
+                "info.udf_select_member_by_bioguide_id",
                 parameters,
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
@@ -126,7 +126,7 @@ namespace clerk_data_data_access.Repository
         {
             using var connection = _connectionFactory.GetDataBaseConnection();
             return await connection.QueryAsync<Member>(
-                "clerkdata.udf_select_members",
+                "info.udf_select_members",
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
         }

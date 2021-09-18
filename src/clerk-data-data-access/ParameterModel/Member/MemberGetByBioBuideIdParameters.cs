@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace clerk_data_data_access.ParemterModels.Member
+namespace clerk_data_data_access.ParameterModel.Member
 {
     internal class MemberGetByBioBuideIdParameters
     {
