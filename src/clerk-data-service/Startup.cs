@@ -1,18 +1,13 @@
+using clerk_data_data_access.Factory;
 using clerk_data_data_access.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace clerk_data_service
 {
@@ -40,7 +35,11 @@ namespace clerk_data_service
                 c.IncludeXmlComments(commentFilePath);
             });
 
+            services.Configure<PostgreSqlConnectionFactoryOptions>(Configuration.GetSection(nameof(PostgreSqlConnectionFactoryOptions)));
+            services.AddScoped<IDbConnectionFactory, PostgreSqlConnectionFactory>();
             services.AddScoped<IMemberDataRepository, MemberDataRepository>();
+            services.AddScoped<IMemberRepository, MemberRepository>();
+            services.AddScoped<ICommitteeRepository, CommitteeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

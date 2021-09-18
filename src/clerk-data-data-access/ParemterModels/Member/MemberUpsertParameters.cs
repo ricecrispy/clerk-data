@@ -4,7 +4,7 @@ using System.Text;
 
 namespace clerk_data_data_access.ParemterModels.Member
 {
-    internal class MemberCreateParameters
+    internal class MemberUpsertParameters
     {
         public string p_state_district { get; set; }
         public string p_bioguide_id { get; set; }
@@ -24,7 +24,7 @@ namespace clerk_data_data_access.ParemterModels.Member
         public string p_district { get; set; }
         public string p_town_name { get; set; }
         public string p_office_building { get; set; }
-        public string p_office_room { get; set; }
+        public int p_office_room { get; set; }
         public string p_office_zip { get; set; }
         public string p_office_zip_suffix { get; set; }
         public string p_phone_number { get; set; }

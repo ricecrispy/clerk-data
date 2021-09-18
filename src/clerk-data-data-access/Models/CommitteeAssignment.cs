@@ -11,4 +11,11 @@ namespace clerk_data_data_access.Models
         [XmlAttribute("rank")]
         public string Rank { get; set; }
     }
+
+    [Serializable]
+    public class SubCommitteeAssignment : CommitteeAssignment
+    {
+        [XmlAttribute("subcomcode")]
+        public string SubCommitteeCode { get; set; }
+    }
 }

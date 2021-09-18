@@ -7,7 +7,7 @@ namespace clerk_data_data_access.Repository
 {
     public interface IMemberRepository
     {
-        Task<Guid> CreateMemberAsync(Member member);
+        Task CreateMemberAsync(Member member);
         Task<Member> GetMemberAsync(string memberBioGuideId);
         Task<IEnumerable<Member>> SearchMembersAsync();
         Task UpdateMemberAsync(string memberBioGuideId, Member member);

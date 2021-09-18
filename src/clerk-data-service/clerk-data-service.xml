@@ -9,6 +9,16 @@
             Controller for memberData.
             </summary>
         </member>
+        <member name="M:clerk_data_service.Controllers.MemberDataController.#ctor(Microsoft.Extensions.Logging.ILogger{clerk_data_service.Controllers.MemberDataController},clerk_data_data_access.Repository.IMemberDataRepository,clerk_data_data_access.Repository.IMemberRepository,clerk_data_data_access.Repository.ICommitteeRepository,System.Net.Http.IHttpClientFactory)">
+            <summary>
+            The constructor for MemberDataController
+            </summary>
+            <param name="logger"></param>
+            <param name="memberDataRepo"></param>
+            <param name="memberRepo"></param>
+            <param name="committeeRepo"></param>
+            <param name="httpClientFactory"></param>
+        </member>
         <member name="M:clerk_data_service.Controllers.MemberDataController.UploadMemberDataXmlByUrlAsync(System.String)">
             <summary>
             Create a MemberData object and stores it in the datastore.
@@ -26,11 +36,12 @@
             <response code="404">MemberData not found</response>
             <response code="500">Unexpected error</response>
         </member>
-        <member name="M:clerk_data_service.Controllers.MemberDataController.GetMemberDataAsync(System.Int32)">
+        <member name="M:clerk_data_service.Controllers.MemberDataController.GetMemberDataAsync(System.Int32,System.Int32)">
             <summary>
             Return a MemberData by congressNum
             </summary>
-            <param name="congressNum">The congress number in the MemberData's TitleInfo field</param>
+            <param name="congressNum">The congress number in the MemberData's TitleInfo property</param>
+            <param name="session">The session in the MemberData's TitleInfo property</param>
             <response code="200">MemberData retrieved</response>
             <response code="404">MemberData not found</response>
             <response code="500">Unexpected error</response>

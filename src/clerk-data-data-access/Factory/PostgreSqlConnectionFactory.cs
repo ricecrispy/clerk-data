@@ -1,9 +1,8 @@
 ﻿using clerk_data_data_access.FluentMap;
+using Microsoft.Extensions.Options;
 using Npgsql;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace clerk_data_data_access.Factory
 {
@@ -11,6 +10,7 @@ namespace clerk_data_data_access.Factory
     {
         public int CommandTimeout { get; private set; }
         private readonly PostgreSqlConnectionFactoryOptions _options;
+        private readonly string _connectionString;
 
         static PostgreSqlConnectionFactory()
         {
@@ -21,11 +21,14 @@ namespace clerk_data_data_access.Factory
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             CommandTimeout = _options.CommandTimeout;
+            _connectionString = CreateDatabaseConnectionString();
         }
+
+        public PostgreSqlConnectionFactory(IOptionsSnapshot<PostgreSqlConnectionFactoryOptions> options) : this(options.Value) { }
 
         public IDbConnection GetDataBaseConnection()
         {
-            return new NpgsqlConnection(CreateDatabaseConnectionString());
+            return new NpgsqlConnection(_connectionString);
         }
 
         private string CreateDatabaseConnectionString()

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace clerk_data_data_access.ParemterModels.MemberData
 {
-    internal class MemberDataCreateParameters
+    internal class MemberDataUpsertParameters
     {
         public string p_publish_date { get; set; }
         public int p_congress_num { get; set; }

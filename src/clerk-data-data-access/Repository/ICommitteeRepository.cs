@@ -8,8 +8,9 @@ namespace clerk_data_data_access.Repository
 {
     public interface ICommitteeRepository
     {
-        Task<IEnumerable<Committee>> SearchComitteesAsync();
-        Task CreateComitteeAsync(Committee committee);
-        Task UpdateComitteeAsync(string code, Committee committee);
+        Task<IEnumerable<Committee>> SearchCommitteesAsync();
+        Task CreateCommitteeAsync(Committee committee);
+        Task<Committee> GetCommitteeByCommitteeCodeAsync(string code);
+        Task UpdateCommitteeAsync(string code, Committee committee);
     }
 }

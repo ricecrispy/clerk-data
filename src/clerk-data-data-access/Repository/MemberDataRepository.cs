@@ -59,7 +59,7 @@ namespace clerk_data_data_access.Repository
 
         public async Task CreateMemberData(string publishData, TitleInfo titleInfo)
         {
-            var parameters = new MemberDataCreateParameters
+            var parameters = new MemberDataUpsertParameters
             {
                 p_publish_date = publishData,
                 p_congress_num = titleInfo.CongressNum,

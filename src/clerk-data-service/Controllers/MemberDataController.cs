@@ -164,16 +164,16 @@ namespace clerk_data_service.Controllers
 
         private async Task AssociateCommitteesToMemberDataAsync(int congressNum, List<Committee> committees)
         {
-            IEnumerable<Committee> existingCommittees = await _committeeRepo.SearchComitteesAsync();
+            IEnumerable<Committee> existingCommittees = await _committeeRepo.SearchCommitteesAsync();
             foreach (var committee in committees)
             {
                 if (!existingCommittees.Any(x => x.Code == committee.Code))
                 {
-                    await _committeeRepo.CreateComitteeAsync(committee);
+                    await _committeeRepo.CreateCommitteeAsync(committee);
                 }
                 else
                 {
-                    await _committeeRepo.UpdateComitteeAsync(committee.Code, committee);
+                    await _committeeRepo.UpdateCommitteeAsync(committee.Code, committee);
                 }
                 await _memberDataRepo.AssociateCommitteeToMemberDataAsync(congressNum, committee.Code);
             }
