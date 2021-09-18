@@ -1,4 +1,6 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# run the following commands in a terminal to start the service container:
+# docker build -t clerk-data-image .
+# docker run -dp 5000:5000 clerk-data-image
 
 FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
 WORKDIR /app
@@ -20,7 +22,5 @@ RUN dotnet publish "clerk-data-service.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN dotnet user-secrets set "PostgreSqlConnectionFactoryOptions:Password" "docker"
 ENTRYPOINT ["dotnet", "clerk-data-service.dll"]
-
-# docker build -t clerk-data-image .
-# docker run -dp 5000:5000 clerk-data-image
