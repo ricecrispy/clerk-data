@@ -70,25 +70,28 @@ namespace clerk_data_data_access.Repository
 
                         foreach (var committeeAssignment in member.CommitteeAssignments)
                         {
-                            bool isSubCommittee = committeeAssignment is SubCommitteeAssignment;
-                            var commCode = isSubCommittee ? 
-                                ((SubCommitteeAssignment)committeeAssignment).SubCommitteeCode : 
-                                committeeAssignment.CommitteeCode;
-
-                            var associationParmaters
-                                = new MemberAssociateCommitteeAssignmentParamters
+                            if (IsCommitteeAssignmentValid(committeeAssignment))
                             {
-                                p_bioguide_id = member.MemberInfo.BioGuideId,
-                                p_committee_code = commCode,
-                                p_is_sub_committee = isSubCommittee,
-                                p_rank = committeeAssignment.Rank
-                            };
+                                bool isSubCommittee = committeeAssignment is SubCommitteeAssignment;
+                                var commCode = isSubCommittee ?
+                                    ((SubCommitteeAssignment)committeeAssignment).SubCommitteeCode :
+                                    committeeAssignment.CommitteeCode;
 
-                            await connection.QueryAsync(
-                                "data.udf_associate_member_committeeAssignment",
-                                associationParmaters,
-                                commandTimeout: _connectionFactory.CommandTimeout,
-                                commandType: CommandType.StoredProcedure);
+                                var associationParmaters
+                                    = new MemberAssociateCommitteeAssignmentParamters
+                                    {
+                                        p_bioguide_id = member.MemberInfo.BioGuideId,
+                                        p_committee_code = commCode,
+                                        p_is_sub_committee = isSubCommittee,
+                                        p_rank = committeeAssignment.Rank
+                                    };
+
+                                await connection.QueryAsync(
+                                    "data.udf_associate_member_committeeAssignment",
+                                    associationParmaters,
+                                    commandTimeout: _connectionFactory.CommandTimeout,
+                                    commandType: CommandType.StoredProcedure);
+                            }
                         }
 
                         transaction.Commit();
@@ -134,6 +137,21 @@ namespace clerk_data_data_access.Repository
         public Task UpdateMemberAsync(string memberBioGuideId, Member member)
         {
             throw new NotImplementedException();
+        }
+
+        private bool IsCommitteeAssignmentValid(CommitteeAssignment committeeAssignment)
+        {
+            var commCode = GetCommitteeAssignmentCode(committeeAssignment);
+            return !string.IsNullOrWhiteSpace(committeeAssignment.Rank) &&
+                    !string.IsNullOrWhiteSpace(commCode);
+        }
+
+        private string GetCommitteeAssignmentCode(CommitteeAssignment committeeAssignment)
+        {
+            bool isSubCommittee = committeeAssignment is SubCommitteeAssignment;
+            return isSubCommittee ?
+                ((SubCommitteeAssignment)committeeAssignment).SubCommitteeCode :
+                committeeAssignment.CommitteeCode;
         }
     }
 }

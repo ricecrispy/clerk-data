@@ -4,6 +4,11 @@
         <name>clerk-data-service</name>
     </assembly>
     <members>
+        <member name="T:clerk_data_service.Controllers.CommitteesController">
+            <summary>
+            Controller for Committee.
+            </summary>
+        </member>
         <member name="T:clerk_data_service.Controllers.MemberDataController">
             <summary>
             Controller for memberData.

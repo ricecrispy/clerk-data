@@ -33,7 +33,7 @@ namespace clerk_data_data_access.Factory
 
         private string CreateDatabaseConnectionString()
         {
-            string connectionStringTemplate = $"Port=5432;Database=${_options.Database};Trust Server Certificate=true;Application Name=ClerkDataAPIRW";
+            string connectionStringTemplate = $"Port=5432;Database={_options.Database};Trust Server Certificate=true;Application Name=ClerkDataAPIRW";
             NpgsqlConnectionStringBuilder builder = new NpgsqlConnectionStringBuilder(connectionStringTemplate)
             {
                 Username = _options.UserName,

@@ -6,6 +6,7 @@ using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -98,10 +99,14 @@ namespace clerk_data_data_access.Repository
         public async Task<IEnumerable<MemberData>> SearchMemberDataAsync()
         {
             using var connection = _connectionFactory.GetDataBaseConnection();
-            return await connection.QueryAsync<MemberData>(
+            IEnumerable<MemberDataDb> memberDataDbList = await connection.QueryAsync<MemberDataDb>(
                 "info.udf_select_memberdata",
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
+
+            List<MemberData> results = memberDataDbList.Select(x => x.ConvertToMemberDataWithTitleInfo()).ToList();
+            //TODO - add members and committees to memberDataList
+            return results;
         }
     }
 }

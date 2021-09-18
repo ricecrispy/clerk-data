@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS clerkdata.info.committee (
     committee_code VARCHAR(10) NOT NULL,
     committee_type VARCHAR(50) NOT NULL,
     committee_room VARCHAR(50) NOT NULL,
-    committee_header_text TEXT NOT NULL,
+    committee_header_text TEXT,
     committee_zip VARCHAR(10) NOT NULL,
     committee_zip_suffix VARCHAR(10) NOT NULL,
     committee_building_code VARCHAR(50) NOT NULL,
@@ -356,7 +356,7 @@ BEGIN
         formal_name,
         prior_congress,
         party,
-        caucusL,
+        caucus,
         representing_state,
         district,
         town_name,
@@ -461,6 +461,21 @@ VALUES
 ('WY', 'Wyoming')
 ;
 
+create function udf_select_states()
+returns TABLE (
+    state_postal_code VARCHAR(10),
+    state_name VARCHAR(50)
+)
+language plpgsql
+as
+$$
+declare
+BEGIN
+    RETURN QUERY
+    SELECT * FROM info.nationstate;
+END;
+$$; 
+
 -- create table for the memberdata object
 CREATE TABLE IF NOT EXISTS clerkdata.info.memberdata (
     memberdata_id UUID PRIMARY KEY,
@@ -506,6 +521,7 @@ BEGIN
         web_url
     )
     VALUES (
+        memberdata_id,
         p_publish_date,
         p_congress_num,
         p_congress_text,

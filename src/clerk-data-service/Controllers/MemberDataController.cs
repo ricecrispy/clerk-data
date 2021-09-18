@@ -2,6 +2,7 @@
 using clerk_data_data_access.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -60,6 +61,16 @@ namespace clerk_data_service.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult> UploadMemberDataXmlByUrlAsync(string xmlUrl)
         {
+            if (string.IsNullOrWhiteSpace(xmlUrl) ||
+                !Uri.TryCreate(xmlUrl, UriKind.RelativeOrAbsolute, out _))
+            {
+                _logger.LogError("{controller}.{method}({xmlUrl}) Failed. Invalid url",
+                    nameof(MemberDataController),
+                    nameof(UploadMemberDataXmlByUrlAsync),
+                    xmlUrl);
+                return BadRequest();
+            }
+
             var httpClient = _httpClientFactory.CreateClient();
             var request = new HttpRequestMessage(HttpMethod.Get, xmlUrl);
             var response = await httpClient.SendAsync(request);
