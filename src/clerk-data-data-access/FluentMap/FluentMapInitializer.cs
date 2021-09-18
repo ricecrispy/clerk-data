@@ -11,7 +11,8 @@ namespace clerk_data_data_access.FluentMap
         {
             FluentMapper.Initialize(t => t.AddMap(new MemberDataMap()));
             FluentMapper.Initialize(t => t.AddMap(new MemberMap()));
-            FluentMapper.Initialize(t => t.AddMap(new CommitteeMap()));
+            FluentMapper.Initialize(t => t.AddMap(new CommitteeDbMap()));
+            FluentMapper.Initialize(t => t.AddMap(new SubCommitteeDbMap()));
         }
 
         /// <summary>

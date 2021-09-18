@@ -25,4 +25,31 @@ namespace clerk_data_data_access.Models
         [XmlElement("ratio")]
         public CommitteeRatio Ratio { get; set; }
     }
+
+    public class SubCommitteeDb : SubCommittee
+    {
+        public int CommitteeMajority { get; set; }
+        public int CommitteeMinority { get; set; }
+
+        public SubCommittee ConvertToSubCommittee()
+        {
+            CommitteeRatio ratio = new CommitteeRatio
+            {
+                Majority = CommitteeMajority,
+                Minority = CommitteeMinority
+            };
+
+            return new SubCommittee
+            {
+                SubComCode = SubComCode,
+                SubComRoom = SubComRoom,
+                SubComZip = SubComZip,
+                SubComZipSuffix = SubComZipSuffix,
+                SubComBuildingCode = SubComBuildingCode,
+                SubComPhone = SubComPhone,
+                SubComFullName = SubComFullName,
+                Ratio = ratio
+            };
+        }
+    }
 }

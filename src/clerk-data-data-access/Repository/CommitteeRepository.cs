@@ -6,6 +6,7 @@ using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -103,10 +104,31 @@ namespace clerk_data_data_access.Repository
         public async Task<IEnumerable<Committee>> SearchCommitteesAsync()
         {
             using var connection = _connectionFactory.GetDataBaseConnection();
-            return await connection.QueryAsync<Committee>(
+            IEnumerable<CommitteeDb> committeeDb = await connection.QueryAsync<CommitteeDb>(
                 "info.udf_select_committees",
                 commandTimeout: _connectionFactory.CommandTimeout,
-                commandType: CommandType.StoredProcedure);
+                commandType: CommandType.StoredProcedure)
+                ;
+
+            List<Committee> results = committeeDb.Select(x => x.ConvertToCommitteeWithEmptySubCommittees()).ToList();
+
+            foreach (var result in results)
+            {
+                var subCommParameters = new CommitteeGetSubCommitteeByCommitteeCodeParameters
+                {
+                    p_committee_code = result.Code
+                };
+
+                IEnumerable<SubCommitteeDb> subComDbList = await connection.QueryAsync<SubCommitteeDb>(
+                    "data.udf_select_subcommittee_by_committee_code",
+                    subCommParameters,
+                    commandTimeout: _connectionFactory.CommandTimeout,
+                    commandType: CommandType.StoredProcedure);
+
+                List<SubCommittee> subComs = subComDbList.Select(x => x.ConvertToSubCommittee()).ToList();
+                result.SubCommittees = subComs;
+            }
+            return results;
         }
 
         public async Task<Committee> GetCommitteeByCommitteeCodeAsync(string code)
@@ -117,11 +139,28 @@ namespace clerk_data_data_access.Repository
             };
 
             using var connection = _connectionFactory.GetDataBaseConnection();
-            return await connection.QuerySingleOrDefaultAsync<Committee>(
-                "info.udf_select_committee_by_committee_code",
+            CommitteeDb committeeDb = await connection.QuerySingleOrDefaultAsync<CommitteeDb>(
+                "data.udf_select_committee_by_committee_code",
                 parameters,
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);
+
+            Committee result = committeeDb.ConvertToCommitteeWithEmptySubCommittees();
+
+            var subCommParameters = new CommitteeGetSubCommitteeByCommitteeCodeParameters
+            {
+                p_committee_code = code
+            };
+
+            IEnumerable<SubCommitteeDb> subComDbList = await connection.QueryAsync<SubCommitteeDb>(
+                "info.udf_select_subcommittee_by_committee_code",
+                parameters,
+                commandTimeout: _connectionFactory.CommandTimeout,
+                commandType: CommandType.StoredProcedure);
+
+            List<SubCommittee> subComs = subComDbList.Select(x => x.ConvertToSubCommittee()).ToList();
+            result.SubCommittees = subComs;
+            return result;
         }
 
         public async Task UpdateCommitteeAsync(string code, Committee committee)

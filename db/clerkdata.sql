@@ -576,6 +576,32 @@ CREATE TABLE IF NOT EXISTS clerkdata.data.committeesubcommitteeassociation (
     subcommittee_code VARCHAR(10) NOT NULL
 );
 
+create function udf_select_subcommittee_by_committee_code(p_committee_code VARCHAR(10))
+returns TABLE (
+    subcommittee_id UUID,
+    subcommittee_code VARCHAR(10),
+    subcommittee_room VARCHAR(50),
+    subcommittee_zip VARCHAR(10),
+    subcommittee_zip_suffix VARCHAR(10),
+    subcommittee_building_code VARCHAR(50),
+    subcommittee_phone VARCHAR(20),
+    subcommittee_full_name TEXT,
+    subcommittee_majority INTEGER,
+    subcommittee_minority INTEGER
+)
+language plpgsql
+as
+$$
+declare
+BEGIN
+    RETURN QUERY
+    SELECT sc.* FROM info.subcommittee sc
+    JOIN data.committeesubcommitteeassociation csa
+    ON csa.subcommittee_code = sc.subcommittee_code
+    WHERE csa.committee_code = p_committee_code;
+END;
+$$;
+
 create function udf_committee_associate_sub_committee(p_committee_code VARCHAR(10), p_sub_committee_code VARCHAR(10))
 returns void
 language plpgsql
