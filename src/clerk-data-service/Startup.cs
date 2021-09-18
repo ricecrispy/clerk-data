@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,6 +36,8 @@ namespace clerk_data_service
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clerk Data Microservice API", Version = "v1"});
+                string commentFilePath = Path.Combine(AppContext.BaseDirectory, "clerk-data-service.xml");
+                c.IncludeXmlComments(commentFilePath);
             });
 
             services.AddScoped<IMemberDataRepository, MemberDataRepository>();

@@ -10,7 +10,7 @@ namespace clerk_data_data_access.Models
     public class MemberData
     {
         [XmlAttribute("publish-date")]
-        public string PublishData { get; set; }
+        public string PublishDate { get; set; }
         
         [XmlElement("title-info")]
         public TitleInfo TitleInfo { get; set; }

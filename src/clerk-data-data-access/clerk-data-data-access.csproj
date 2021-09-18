@@ -5,4 +5,14 @@
     <RootNamespace>clerk_data_data_access</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.90" />
+    <PackageReference Include="Dapper.FluentMap" Version="2.0.0" />
+    <PackageReference Include="Npgsql" Version="5.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ParemterModels\Committee\" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>clerk-data-service</name>
+    </assembly>
+    <members>
+        <member name="T:clerk_data_service.Controllers.MemberDataController">
+            <summary>
+            Controller for memberData.
+            </summary>
+        </member>
+        <member name="M:clerk_data_service.Controllers.MemberDataController.UploadMemberDataXmlByUrlAsync(System.String)">
+            <summary>
+            Create a MemberData object and stores it in the datastore.
+            </summary>
+            <param name="xmlUrl">The url of the XML file.</param>
+            <response code="204">MemberData file uploaded</response>
+            <response code="400">MemberData file cannot be retrieved</response>
+            <response code="500">Unexpected error</response>
+        </member>
+        <member name="M:clerk_data_service.Controllers.MemberDataController.SearchMemberDataAsync">
+            <summary>
+            Return a list of MemberData
+            </summary>
+            <response code="200">List of MemberData retrieved</response>
+            <response code="404">MemberData not found</response>
+            <response code="500">Unexpected error</response>
+        </member>
+        <member name="M:clerk_data_service.Controllers.MemberDataController.GetMemberDataAsync(System.Int32)">
+            <summary>
+            Return a MemberData by congressNum
+            </summary>
+            <param name="congressNum">The congress number in the MemberData's TitleInfo field</param>
+            <response code="200">MemberData retrieved</response>
+            <response code="404">MemberData not found</response>
+            <response code="500">Unexpected error</response>
+        </member>
+    </members>
+</doc>
