@@ -10,9 +10,11 @@ Data Model:
 
 Service:
 - For the service I assumed I needed to implement a feature complete API that provided CRUD functionalities for each data model, so I created a RESTful API service with .NET Core 3.1. However, after reading the instructions and the XML file I did not think I could implement a feature complete service over one weekend, so I had to determine and focus on the core goal of the exercise, and limited the scope of the service to 1) uploading file content to the database and 2) retrieving the MemberData object.
+- I felt like I could have optimized the memberdata GET method if I had more time. I thought I had a little too many foreach loops calling the database. I could alternatively front-loaded some of the data and query the information I needed with LINQ. 
 
 Database:
 - I picked a relational database for this exercise because there were a lot of relationships between the data models. Member <-> committee, committee <-> subcommittee, etc, etc. I chose PostgreSql specifically for its ease of use and docker support.
+- I simplified the database structure by flattening some of the data models when I was creating the table for them. For example, I put all the fields of MemberData's title-info element in MemberData table because I felt making a table for every element and sub-element would made the database structure complicated and lead to confusion.
 
 Other Issues:
 - I had some issues making connections between the service and database after I started the docker containers. I got an exception saying the service "cannot assign requested address". I was able to solve it based on a [stack overflow article](https://stackoverflow.com/questions/59224272/connect-cannot-assign-requested-address). The basic explanation was that I could not use `localhost` in my config files. Instead, I needed to replace it with the name I assigned a infrastructure in the docker-compose.yml file. 
