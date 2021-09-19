@@ -38,6 +38,8 @@ There are two methods - POST /memberdata and GET /memberdata.
 - The Get method can be accessed by making a GET HTTP request to http://localhost:5000/memberdata. This request retrieves all MemberData objects and returns it.
 - The method returns 200 and the MemberData objects if it completes successfully.
 
+There is also a swagger doc available at http://localhost:5000/api.
+
 Database:
 
 The database can be accessed by making a connection to 127.0.0.1:5432 after you spin up the containers.
