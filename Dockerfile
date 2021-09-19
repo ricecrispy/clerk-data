@@ -4,7 +4,7 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
 WORKDIR /app
-EXPOSE 5000 5001
+EXPOSE 5000
 
 ENV ASPNETCORE_URLS=http://+:5000
 

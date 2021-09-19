@@ -41,7 +41,7 @@
             <response code="404">MemberData not found</response>
             <response code="500">Unexpected error</response>
         </member>
-        <member name="M:clerk_data_service.Controllers.MemberDataController.GetMemberDataAsync(System.Int32,System.Int32)">
+        <member name="M:clerk_data_service.Controllers.MemberDataController.ProcessMemberList(System.Collections.Generic.IEnumerable{clerk_data_data_access.Models.Member})">
             <summary>
             Return a MemberData by congressNum
             </summary>

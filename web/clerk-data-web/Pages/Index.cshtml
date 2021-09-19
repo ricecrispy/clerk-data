@@ -1,0 +1,18 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<p>Enter a URL to a XML file:</p>
+<form method="post">
+    URL: 
+    <input asp-for="FileUrl" />
+    <input type="submit" />
+</form>
+<hr />
+<div class="text-center">
+    <p>MemberData:</p>
+    <p>@Model.MemberData</p>
+</div>
+

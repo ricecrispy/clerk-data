@@ -9,3 +9,8 @@ services:
     build: db/
     ports:
       - "5432:5432"
+
+  web:
+    build: web/clerk-data-web/
+    ports:
+      - "5555:5555"

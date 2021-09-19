@@ -79,7 +79,7 @@ namespace clerk_data_service.Controllers
                 using var responseStream = await response.Content.ReadAsStreamAsync();
                 MemberData content = _xmlSerializer.Deserialize(responseStream) as MemberData;
                 await UploadFileContent(content);
-                _logger.LogError("{controller}.{method}({xmlUrl}) Succeeded.",
+                _logger.LogInformation("{controller}.{method}({xmlUrl}) Succeeded.",
                     nameof(MemberDataController),
                     nameof(UploadMemberDataXmlByUrlAsync),
                     xmlUrl);
@@ -146,23 +146,23 @@ namespace clerk_data_service.Controllers
         /// <response code="200">MemberData retrieved</response>
         /// <response code="404">MemberData not found</response>
         /// <response code="500">Unexpected error</response>
-        [HttpGet("{congressNum}/sessions/{session}")]
-        [ProducesResponseType(typeof(MemberData), 200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<MemberData>> GetMemberDataAsync(int congressNum, int session)
-        {
-            MemberData memberData = await _memberDataRepo.GetMemberDataAsync(congressNum, session);
-            if (memberData == null)
-            {
-                _logger.LogError("{controller}.{method}({congressNum}) Failed. No such MemberData",
-                    nameof(MemberDataController),
-                    nameof(GetMemberDataAsync),
-                    congressNum);
-                return NotFound();
-            }
-            return memberData;
-        }
+        //[HttpGet("{congressNum}/sessions/{session}")]
+        //[ProducesResponseType(typeof(MemberData), 200)]
+        //[ProducesResponseType(404)]
+        //[ProducesResponseType(500)]
+        //public async Task<ActionResult<MemberData>> GetMemberDataAsync(int congressNum, int session)
+        //{
+        //    MemberData memberData = await _memberDataRepo.GetMemberDataAsync(congressNum, session);
+        //    if (memberData == null)
+        //    {
+        //        _logger.LogError("{controller}.{method}({congressNum}) Failed. No such MemberData",
+        //            nameof(MemberDataController),
+        //            nameof(GetMemberDataAsync),
+        //            congressNum);
+        //        return NotFound();
+        //    }
+        //    return memberData;
+        //}
 
         private async Task<List<Member>> ProcessMemberList(IEnumerable<Member> members)
         {

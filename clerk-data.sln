@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AAE77F73-429C-4649-8304-5C2CFAC39E0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clerk-data-service", "src\clerk-data-service\clerk-data-service.csproj", "{221AD909-566D-4EF9-A331-609C4704A4BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "clerk-data-service", "src\clerk-data-service\clerk-data-service.csproj", "{221AD909-566D-4EF9-A331-609C4704A4BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clerk-data-data-access", "src\clerk-data-data-access\clerk-data-data-access.csproj", "{F29EC75D-6762-4806-BEB9-E96E815342EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "clerk-data-data-access", "src\clerk-data-data-access\clerk-data-data-access.csproj", "{F29EC75D-6762-4806-BEB9-E96E815342EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "clerk-data-web", "web\clerk-data-web\clerk-data-web.csproj", "{DD6154F6-D989-4827-82B0-E24F6A975BA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{F29EC75D-6762-4806-BEB9-E96E815342EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F29EC75D-6762-4806-BEB9-E96E815342EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F29EC75D-6762-4806-BEB9-E96E815342EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD6154F6-D989-4827-82B0-E24F6A975BA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD6154F6-D989-4827-82B0-E24F6A975BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD6154F6-D989-4827-82B0-E24F6A975BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD6154F6-D989-4827-82B0-E24F6A975BA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +36,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{221AD909-566D-4EF9-A331-609C4704A4BE} = {AAE77F73-429C-4649-8304-5C2CFAC39E0D}
 		{F29EC75D-6762-4806-BEB9-E96E815342EE} = {AAE77F73-429C-4649-8304-5C2CFAC39E0D}
+		{DD6154F6-D989-4827-82B0-E24F6A975BA6} = {AAE77F73-429C-4649-8304-5C2CFAC39E0D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31E9956F-EB68-4EAB-96FB-4943A487D105}
