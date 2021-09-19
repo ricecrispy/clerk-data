@@ -3,6 +3,20 @@
 ## Purpose
 This repository contains a service which processes a MemberData XML file by inputting the file's url, a script to create a PostgreSQL database to store the data in the file, and a simple UI to upload a file and view the data.
 
+## Design choices and issues
+Data Model:
+- After looking at the XML file provided, I decided to design data models for MemberData (the root element), Member (the elements inside the member-info element), Committee (the elements inside the committees element), and SubCommittee. By capturing these elements and the relationships between them. I was confident that I could fully represent everything that was in the XML file.
+- The main issue with creating these data models was that it consumed a large amount of time since there were a lot of data to capture. For example, the Member element contained a nested object that had more than 20 fields that I had to type out when creating the model.  
+
+Service:
+- For the service I assumed I needed to implement a feature complete API that provided CRUD functionalities for each data model, so I created a RESTful API service with .NET Core 3.1. However, after reading the instructions and the XML file I did not think I could implement a feature complete service over one weekend, so I had to determine and focus on the core goal of the exercise, and limited the scope of the service to 1) uploading file content to the database and 2) retrieving the MemberData object.
+
+Database:
+- I picked a relational database for this exercise because there were a lot of relationships between the data models. Member <-> committee, committee <-> subcommittee, etc, etc. I chose PostgreSql specifically for its ease of use and docker support.
+
+Other Issues:
+- I had some issues making connections between the service and database after I started the docker containers. I got an exception saying the service "cannot assign requested address". I was able to solve it based on a [stack overflow article](https://stackoverflow.com/questions/59224272/connect-cannot-assign-requested-address). The basic explanation was that I could not use `localhost` in my config files. Instead, I needed to replace it with the name I assigned a infrastructure in the docker-compose.yml file. 
+
 ## Getting Started
 
 ### Prerequisites
