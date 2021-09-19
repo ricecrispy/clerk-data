@@ -5,6 +5,9 @@ using System.Xml.Serialization;
 
 namespace clerk_data_data_access.Models
 {
+    /// <summary>
+    /// The data model for the root element MemberData.
+    /// </summary>
     [Serializable]
     [XmlRoot("MemberData")]
     public class MemberData

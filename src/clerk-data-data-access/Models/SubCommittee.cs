@@ -5,6 +5,10 @@ using System.Xml.Serialization;
 
 namespace clerk_data_data_access.Models
 {
+    /// <summary>
+    /// The data model for the subcommittee element 
+    /// under the committee element in committees.
+    /// </summary>
     [Serializable]
     public class SubCommittee
     {

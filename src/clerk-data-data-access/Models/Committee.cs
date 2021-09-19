@@ -4,6 +4,9 @@ using System.Xml.Serialization;
 
 namespace clerk_data_data_access.Models
 {
+    /// <summary>
+    /// A data model for the committee element
+    /// </summary>
     [XmlRoot("committee")]
     [Serializable]
     public class Committee

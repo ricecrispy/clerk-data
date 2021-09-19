@@ -4,6 +4,10 @@ using System.Xml.Serialization;
 
 namespace clerk_data_data_access.Models
 {
+    /// <summary>
+    /// The data model for the member-info element 
+    /// under the member element.
+    /// </summary>
     [Serializable]
     public class MemberInfo
     {

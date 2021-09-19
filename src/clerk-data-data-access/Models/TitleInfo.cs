@@ -3,6 +3,10 @@ using System.Xml.Serialization;
 
 namespace clerk_data_data_access.Models
 {
+    /// <summary>
+    /// The data model for the title-info element
+    /// under the MemberData element.
+    /// </summary>
     public class TitleInfo
     {
         [XmlElement("congress-num")]

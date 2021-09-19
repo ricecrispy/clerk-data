@@ -3,6 +3,10 @@ using System.Xml.Serialization;
 
 namespace clerk_data_data_access.Models
 {
+    /// <summary>
+    /// The data model for the committee element 
+    /// under the committee-assignment element.
+    /// </summary>
     [Serializable]
     public class CommitteeAssignment
     {
@@ -12,6 +16,10 @@ namespace clerk_data_data_access.Models
         public string Rank { get; set; }
     }
 
+    /// <summary>
+    /// The data model for the subcommittee element
+    /// under the committee-assignment element.
+    /// </summary>
     [Serializable]
     public class SubCommitteeAssignment : CommitteeAssignment
     {
