@@ -117,9 +117,26 @@ namespace clerk_data_service.Controllers
                     nameof(SearchMemberDataAsync));
                 return NotFound();
             }
+
+            foreach (var memberData in memberDataList)
+            {
+                IEnumerable<Member> memberList = 
+                    await _memberDataRepo.GetAssociatedMembersAsync(memberData.TitleInfo.CongressNum, memberData.TitleInfo.Session);
+                if (memberList.Any())
+                {
+                    memberData.Members = await ProcessMemberList(memberList);
+                }
+                
+                IEnumerable<Committee> committeeList =
+                    await _memberDataRepo.GetAssociatedCommitteesAsync(memberData.TitleInfo.CongressNum, memberData.TitleInfo.Session);
+                if (committeeList.Any())
+                {
+                    memberData.Committees = await ProcessCommitteeList(committeeList); ;
+                }
+            }
+            
             return memberDataList.ToList();
         }
-
 
         /// <summary>
         /// Return a MemberData by congressNum
@@ -147,16 +164,36 @@ namespace clerk_data_service.Controllers
             return memberData;
         }
 
+        private async Task<List<Member>> ProcessMemberList(IEnumerable<Member> members)
+        {
+            List<Member> results = new List<Member>();
+            foreach (var member in members)
+            {
+                results.Add(await _memberRepo.GetStateAndCommitteeAssignmentsAsync(member));
+            }
+            return results;
+        }
+
+        private async Task<List<Committee>> ProcessCommitteeList(IEnumerable<Committee> committees)
+        {
+            List<Committee> results = new List<Committee>();
+            foreach (var committee in committees)
+            {
+                results.Add(await _committeeRepo.GetSubCommitteesAsync(committee));
+            }
+            return results;
+        }
+
         private async Task UploadFileContent(MemberData memberData)
         {
             var committees = memberData.Committees;
             var members = memberData.Members;
             await _memberDataRepo.CreateMemberData(memberData.PublishDate, memberData.TitleInfo);
-            await AssociateCommitteesToMemberDataAsync(memberData.TitleInfo.CongressNum, committees);
-            await AssociateMembersToMemberDataAsync(memberData.TitleInfo.CongressNum, members);
+            await AssociateCommitteesToMemberDataAsync(memberData.TitleInfo.CongressNum, committees, memberData.TitleInfo.Session);
+            await AssociateMembersToMemberDataAsync(memberData.TitleInfo.CongressNum, members, memberData.TitleInfo.Session);
         }
 
-        private async Task AssociateMembersToMemberDataAsync(int congressNum, List<Member> members)
+        private async Task AssociateMembersToMemberDataAsync(int congressNum, List<Member> members, int session)
         {
             IEnumerable<Member> existingMembers = await _memberRepo.SearchMembersAsync();
             foreach (var member in members)
@@ -169,11 +206,11 @@ namespace clerk_data_service.Controllers
                 {
                     await _memberRepo.UpdateMemberAsync(member.MemberInfo.BioGuideId, member);
                 }
-                await _memberDataRepo.AssociateMemberToMemberDataAsync(congressNum, member.MemberInfo.BioGuideId);
+                await _memberDataRepo.AssociateMemberToMemberDataAsync(congressNum, member.MemberInfo.BioGuideId, session);
             }
         }
 
-        private async Task AssociateCommitteesToMemberDataAsync(int congressNum, List<Committee> committees)
+        private async Task AssociateCommitteesToMemberDataAsync(int congressNum, List<Committee> committees, int session)
         {
             IEnumerable<Committee> existingCommittees = await _committeeRepo.SearchCommitteesAsync();
             foreach (var committee in committees)
@@ -186,7 +223,7 @@ namespace clerk_data_service.Controllers
                 {
                     await _committeeRepo.UpdateCommitteeAsync(committee.Code, committee);
                 }
-                await _memberDataRepo.AssociateCommitteeToMemberDataAsync(congressNum, committee.Code);
+                await _memberDataRepo.AssociateCommitteeToMemberDataAsync(congressNum, committee.Code, session);
             }
         }
     }

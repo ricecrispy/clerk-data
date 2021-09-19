@@ -410,6 +410,7 @@ INSERT INTO nationstate (state_postal_code, state_name)
 VALUES
 ('AL', 'Alabama'),
 ('AK', 'Alaska'),
+('AS', 'American Samoa'),
 ('AZ', 'Arizona'),
 ('AR', 'Arkansas'),
 ('CA', 'California'),
@@ -419,6 +420,7 @@ VALUES
 ('DC', 'District of Columbia'),
 ('FL', 'Florida'),
 ('GA', 'Georgia'),
+('GU', 'Guam'),
 ('HI', 'Hawaii'),
 ('ID', 'Idaho'),
 ('IL', 'Illinois'),
@@ -428,6 +430,7 @@ VALUES
 ('KY', 'Kentucky'),
 ('LA', 'Louisiana'),
 ('ME', 'Maine'),
+('MP', 'Northern Mariana Islands'),
 ('MD', 'Maryland'),
 ('MA', 'Massachusetts'),
 ('MI', 'Michigan'),
@@ -447,6 +450,7 @@ VALUES
 ('OK', 'Oklahoma'),
 ('OR', 'Oregon'),
 ('PA', 'Pennsylvania'),
+('PR' ,'Puerto Rico'),
 ('RI', 'Rhode Island'),
 ('SC', 'South Carolina'),
 ('SD', 'South Dakota'),
@@ -455,6 +459,7 @@ VALUES
 ('UT', 'Utah'),
 ('VT', 'Vermont'),
 ('VA', 'Virginia'),
+('VI', 'Virgin Islands'),
 ('WA', 'Washington'),
 ('WV', 'West Virginia'),
 ('WI', 'Wisconsin'),
@@ -638,6 +643,23 @@ CREATE TABLE IF NOT EXISTS clerkdata.data.membercommitteeassociation (
     is_sub_committee BOOLEAN NOT NULL
 );
 
+create function udf_select_member_committee_assignments_by_bioguide_id(p_bioguide_id VARCHAR(20))
+returns TABLE (
+    committee_code VARCHAR(10),
+    member_rank VARCHAR(10),
+    is_sub_committee BOOLEAN
+)
+language plpgsql
+as
+$$
+declare
+BEGIN
+    RETURN QUERY
+    SELECT m.committee_code, m.member_rank, m.is_sub_committee from data.membercommitteeassociation m
+    WHERE m.bioguide_id = p_bioguide_id;
+END;
+$$;
+
 create function udf_associate_member_committeeAssignment(
     p_bioguide_id VARCHAR(20),
     p_committee_code VARCHAR(10),
@@ -657,36 +679,109 @@ $$;
 -- create table to represent association between memberdata and member
 CREATE TABLE IF NOT EXISTS clerkdata.data.memberdatamemberassociation (
     congress_num INTEGER NOT NULL,
-    bioguide_id VARCHAR(20) NOT NULL
+    bioguide_id VARCHAR(20) NOT NULL,
+    congress_session INTEGER NOT NULL
 );
 
-create function udf_associate_member_memberdata(p_congress_num INTEGER, p_member_biograde_id VARCHAR(20))
+create function udf_select_memberdata_members_by_congress_num_and_session(p_congress_num INTEGER, p_session INTEGER)
+returns TABLE (
+    member_id UUID,
+    state_district VARCHAR(10),
+    bioguide_id VARCHAR(20),
+    last_name VARCHAR(20),
+    first_name VARCHAR(20),
+    middle_name VARCHAR(20),
+    suffix VARCHAR(10),
+    courtesy VARCHAR(10),
+    name_list VARCHAR(50),
+    sort_name VARCHAR(50),
+    official_name VARCHAR(50),
+    formal_name VARCHAR(50),
+    prior_congress INTEGER,
+    party VARCHAR(100),
+    caucus VARCHAR(100),
+    representing_state VARCHAR(10),
+    district VARCHAR(50),
+    town_name VARCHAR(100),
+    office_building VARCHAR(100),
+    office_room INTEGER,
+    office_zip VARCHAR(10),
+    office_zip_suffix VARCHAR(10),
+    office_phone_number VARCHAR(20),
+    elected_date VARCHAR(50),
+    sworn_date VARCHAR(50)
+)
+language plpgsql
+as
+$$
+declare
+BEGIN
+    RETURN QUERY
+    SELECT m.* FROM data.memberdatamemberassociation mdma
+    JOIN info.member m
+    ON m.bioguide_id = mdma.bioguide_id
+    WHERE mdma.congress_num = congress_num
+    AND mdma.congress_session = p_session;
+END;
+$$;
+
+create function udf_associate_member_memberdata(p_congress_num INTEGER, p_member_biograde_id VARCHAR(20), p_session INTEGER)
 returns void
 language plpgsql
 as
 $$
 declare
 BEGIN
-    INSERT INTO data.memberdatamemberassociation(congress_num, bioguide_id)
-    VALUES (p_congress_num, p_member_biograde_id);
+    INSERT INTO data.memberdatamemberassociation(congress_num, bioguide_id, congress_session)
+    VALUES (p_congress_num, p_member_biograde_id, p_session);
 END;
 $$;
 
 -- create table to represent association between memberdata and committee
 CREATE TABLE IF NOT EXISTS clerkdata.data.memberdatacommitteeassociation (
     congress_num INTEGER NOT NULL,
-    committee_code VARCHAR(10) NOT NULL
+    committee_code VARCHAR(10) NOT NULL,
+    congress_session INTEGER NOT NULL
 );
 
-create function udf_associate_committee_memberdata(p_congress_num INTEGER, p_committee_code VARCHAR(10))
+create function udf_select_memberdata_committees_by_congress_num_and_session(p_congress_num INTEGER, p_session INTEGER)
+returns TABLE(
+    committee_id UUID,
+    committee_code VARCHAR(10),
+    committee_type VARCHAR(50),
+    committee_room VARCHAR(50),
+    committee_header_text TEXT,
+    committee_zip VARCHAR(10),
+    committee_zip_suffix VARCHAR(10),
+    committee_building_code VARCHAR(50),
+    committee_phone VARCHAR(20),
+    committee_full_name TEXT,
+    committee_majority INTEGER,
+    committee_minority INTEGER
+)
+language plpgsql
+as
+$$
+declare
+BEGIN
+    RETURN QUERY
+    SELECT c.* FROM data.memberdatacommitteeassociation mdca
+    JOIN info.committee c
+    ON c.committee_code = mdca.committee_code
+    WHERE mdca.congress_num = congress_num
+    AND mdca.congress_session = p_session;
+END;
+$$;
+
+create function udf_associate_committee_memberdata(p_congress_num INTEGER, p_committee_code VARCHAR(10), p_session INTEGER)
 returns void
 language plpgsql
 as
 $$
 declare
 BEGIN
-    INSERT INTO data.memberdatacommitteeassociation(congress_num, committee_code)
-    VALUES (p_congress_num, p_committee_code);
+    INSERT INTO data.memberdatacommitteeassociation(congress_num, committee_code, congress_session)
+    VALUES (p_congress_num, p_committee_code, p_session);
 END;
 $$;
 

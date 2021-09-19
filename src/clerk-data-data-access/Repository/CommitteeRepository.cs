@@ -131,6 +131,25 @@ namespace clerk_data_data_access.Repository
             return results;
         }
 
+        public async Task<Committee> GetSubCommitteesAsync(Committee committee)
+        {
+            using var connection = _connectionFactory.GetDataBaseConnection();
+            var subCommParameters = new CommitteeGetSubCommitteeByCommitteeCodeParameters
+            {
+                p_committee_code = committee.Code
+            };
+
+            IEnumerable<SubCommitteeDb> subComDbList = await connection.QueryAsync<SubCommitteeDb>(
+                "data.udf_select_subcommittee_by_committee_code",
+                subCommParameters,
+                commandTimeout: _connectionFactory.CommandTimeout,
+                commandType: CommandType.StoredProcedure);
+
+            List<SubCommittee> subComs = subComDbList.Select(x => x.ConvertToSubCommittee()).ToList();
+            committee.SubCommittees = subComs;
+            return committee;
+        }
+
         public async Task<Committee> GetCommitteeByCommitteeCodeAsync(string code)
         {
             var parameters = new CommitteeGetByCommitteeCodeParameters
@@ -153,7 +172,7 @@ namespace clerk_data_data_access.Repository
             };
 
             IEnumerable<SubCommitteeDb> subComDbList = await connection.QueryAsync<SubCommitteeDb>(
-                "info.udf_select_subcommittee_by_committee_code",
+                "data.udf_select_subcommittee_by_committee_code",
                 parameters,
                 commandTimeout: _connectionFactory.CommandTimeout,
                 commandType: CommandType.StoredProcedure);

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace clerk_data_data_access.Repository
@@ -26,12 +25,13 @@ namespace clerk_data_data_access.Repository
             FluentMapInitializer.EnsureMapsInitialized();
         }
 
-        public async Task AssociateCommitteeToMemberDataAsync(int congressNum, string code)
+        public async Task AssociateCommitteeToMemberDataAsync(int congressNum, string code, int session)
         {
             var parameters = new MemberDataAssociateCommitteeParameters
             {
                 p_congress_num = congressNum,
-                p_committee_code = code
+                p_committee_code = code,
+                p_session = session
             };
 
             using var connection = _connectionFactory.GetDataBaseConnection();
@@ -42,12 +42,13 @@ namespace clerk_data_data_access.Repository
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task AssociateMemberToMemberDataAsync(int congressNum, string bioGuideId)
+        public async Task AssociateMemberToMemberDataAsync(int congressNum, string bioGuideId, int session)
         {
             var parameters = new MemberDataAssociateMemberParameters
             {
                 p_congress_num = congressNum,
-                p_member_biograde_id = bioGuideId
+                p_member_biograde_id = bioGuideId,
+                p_session = session
             };
 
             using var connection = _connectionFactory.GetDataBaseConnection();
@@ -105,7 +106,41 @@ namespace clerk_data_data_access.Repository
                 commandType: CommandType.StoredProcedure);
 
             List<MemberData> results = memberDataDbList.Select(x => x.ConvertToMemberDataWithTitleInfo()).ToList();
-            //TODO - add members and committees to memberDataList
+            return results;
+        }
+
+        public async Task<IEnumerable<Member>> GetAssociatedMembersAsync(int congressNum, int session)
+        {
+            using var connection = _connectionFactory.GetDataBaseConnection();
+            var parameters = new MemberDataGetAssociationParameters
+            {
+                p_congress_num = congressNum,
+                p_session = session
+            };
+            IEnumerable<MemberDb> members = await connection.QueryAsync<MemberDb>(
+                "data.udf_select_memberdata_members_by_congress_num_and_session",
+                parameters,
+                commandTimeout: _connectionFactory.CommandTimeout,
+                commandType: CommandType.StoredProcedure);
+            IEnumerable<Member> results = members.Select(x => x.ConvertToMemberWithNoCommitteeAndStateFullName());
+            return results;
+            
+        }
+
+        public async Task<IEnumerable<Committee>> GetAssociatedCommitteesAsync(int congressNum, int session)
+        {
+            using var connection = _connectionFactory.GetDataBaseConnection();
+            var parameters = new MemberDataGetAssociationParameters
+            {
+                p_congress_num = congressNum,
+                p_session = session
+            };
+            IEnumerable<CommitteeDb> committees = await connection.QueryAsync<CommitteeDb>(
+                "data.udf_select_memberdata_committees_by_congress_num_and_session",
+                parameters,
+                commandTimeout: _connectionFactory.CommandTimeout,
+                commandType: CommandType.StoredProcedure);
+            IEnumerable<Committee> results = committees.Select(x => x.ConvertToCommitteeWithEmptySubCommittees());
             return results;
         }
     }

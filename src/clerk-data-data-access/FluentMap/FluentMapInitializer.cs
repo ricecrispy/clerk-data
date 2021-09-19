@@ -10,9 +10,11 @@ namespace clerk_data_data_access.FluentMap
         static FluentMapInitializer()
         {
             FluentMapper.Initialize(t => t.AddMap(new MemberDataDbMap()));
-            FluentMapper.Initialize(t => t.AddMap(new MemberMap()));
+            FluentMapper.Initialize(t => t.AddMap(new MemberDbMap()));
             FluentMapper.Initialize(t => t.AddMap(new CommitteeDbMap()));
             FluentMapper.Initialize(t => t.AddMap(new SubCommitteeDbMap()));
+            FluentMapper.Initialize(t => t.AddMap(new CommitteeAssignmentDbMap()));
+            FluentMapper.Initialize(t => t.AddMap(new StateMap()));
         }
 
         /// <summary>

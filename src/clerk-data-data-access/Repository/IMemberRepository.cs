@@ -12,5 +12,6 @@ namespace clerk_data_data_access.Repository
         Task<IEnumerable<Member>> SearchMembersAsync();
         Task UpdateMemberAsync(string memberBioGuideId, Member member);
         Task DeleteMemberAsync(string memberBioGuideId);
+        Task<Member> GetStateAndCommitteeAssignmentsAsync(Member member);
     }
 }

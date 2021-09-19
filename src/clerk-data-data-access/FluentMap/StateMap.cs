@@ -6,11 +6,12 @@ using System.Text;
 
 namespace clerk_data_data_access.FluentMap
 {
-    internal class MemberMap : EntityMap<Member>
+    internal class StateMap : EntityMap<State>
     {
-        public MemberMap()
+        public StateMap()
         {
-
+            Map(r => r.PostalCode).ToColumn("state_postal_code");
+            Map(r => r.FullName).ToColumn("state_name");
         }
     }
 }

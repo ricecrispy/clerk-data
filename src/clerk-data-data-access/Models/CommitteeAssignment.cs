@@ -18,4 +18,11 @@ namespace clerk_data_data_access.Models
         [XmlAttribute("subcomcode")]
         public string SubCommitteeCode { get; set; }
     }
+
+    public class CommitteeAssignmentDb
+    {
+        public string CommitteeCode { get; set; }
+        public string Rank { get; set; }
+        public bool IsSubCommittee { get; set; }
+    }
 }

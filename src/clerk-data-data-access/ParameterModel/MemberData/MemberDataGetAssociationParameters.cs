@@ -4,10 +4,9 @@ using System.Text;
 
 namespace clerk_data_data_access.ParameterModel.MemberData
 {
-    internal class MemberDataAssociateCommitteeParameters
+    internal class MemberDataGetAssociationParameters
     {
-        public int p_session { get; set; }
         public int p_congress_num { get; set; }
-        public string p_committee_code { get; set; }
+        public int p_session { get; set; }
     }
 }

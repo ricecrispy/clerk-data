@@ -6,6 +6,7 @@ using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace clerk_data_data_access.Repository
     public class MemberRepository : IMemberRepository
     {
         private readonly IDbConnectionFactory _connectionFactory;
+        private IEnumerable<State> _states;
 
         public MemberRepository(IDbConnectionFactory connectionFactory)
         {
@@ -134,9 +136,68 @@ namespace clerk_data_data_access.Repository
                 commandType: CommandType.StoredProcedure);
         }
 
+        public async Task<Member> GetStateAndCommitteeAssignmentsAsync(Member member)
+        {
+            if (_states == null)
+            {
+                _states = await GetAllStatesAsync();
+            }
+
+            Member result = new Member
+            {
+                StateDistrict = member.StateDistrict,
+                MemberInfo = member.MemberInfo
+            };
+            result.MemberInfo.State = _states.Single(x => x.PostalCode == result.MemberInfo.State.PostalCode);
+
+            var parameters = new MemberGetAssociatedCommitteeAssignmentsParameters
+            {
+                p_bioguide_id = result.MemberInfo.BioGuideId
+            };
+
+            using var connection = _connectionFactory.GetDataBaseConnection();
+            IEnumerable<CommitteeAssignmentDb> assignments = await connection.QueryAsync<CommitteeAssignmentDb>(
+                "data.udf_select_member_committee_assignments_by_bioguide_id",
+                parameters,
+                commandTimeout: _connectionFactory.CommandTimeout,
+                commandType: CommandType.StoredProcedure);
+            List<CommitteeAssignment> committeeAssignments = new List<CommitteeAssignment>();
+            foreach (var assignment in assignments)
+            {
+                if (assignment.IsSubCommittee)
+                {
+                    committeeAssignments.Add(new SubCommitteeAssignment
+                    {
+                        Rank = assignment.Rank,
+                        SubCommitteeCode = assignment.CommitteeCode,
+                        CommitteeCode = assignment.CommitteeCode
+                    });
+                }
+                else
+                {
+                    committeeAssignments.Add(new CommitteeAssignment
+                    {
+                        Rank = assignment.Rank,
+                        CommitteeCode = assignment.CommitteeCode
+                    });
+                }
+            }
+            result.CommitteeAssignments = committeeAssignments;
+            return result;
+        }
+
         public Task UpdateMemberAsync(string memberBioGuideId, Member member)
         {
             throw new NotImplementedException();
+        }
+
+        private async Task<IEnumerable<State>> GetAllStatesAsync()
+        {
+            using var connection = _connectionFactory.GetDataBaseConnection();
+            return await connection.QueryAsync<State>(
+                "info.udf_select_states",
+                commandTimeout: _connectionFactory.CommandTimeout,
+                commandType: CommandType.StoredProcedure);
         }
 
         private bool IsCommitteeAssignmentValid(CommitteeAssignment committeeAssignment)

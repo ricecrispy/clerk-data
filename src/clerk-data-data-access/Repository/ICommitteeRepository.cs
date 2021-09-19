@@ -12,5 +12,6 @@ namespace clerk_data_data_access.Repository
         Task CreateCommitteeAsync(Committee committee);
         Task<Committee> GetCommitteeByCommitteeCodeAsync(string code);
         Task UpdateCommitteeAsync(string code, Committee committee);
+        Task<Committee> GetSubCommitteesAsync(Committee committee);
     }
 }
