@@ -11,6 +11,7 @@ Data Model:
 Service:
 - For the service I assumed I needed to implement a feature complete API that provided CRUD functionalities for each data model, so I created a RESTful API service with .NET Core 3.1. However, after reading the instructions and the XML file I did not think I could implement a feature complete service over one weekend, so I had to determine and focus on the core goal of the exercise, and limited the scope of the service to 1) uploading file content to the database and 2) retrieving the MemberData object.
 - I felt like I could have optimized the memberdata GET method if I had more time. I thought I had a little too many foreach loops calling the database. I could alternatively front-loaded some of the data and query the information I needed with LINQ. 
+- One particular design choice I regretted was making subCommittee a subclass of committee under the committee-assignments element. I initially made that choice so I could fit both elements in one list when parsing the elements from XML. However, they all showed up as committee objects when I called the retrieve method from the swagger page.
 
 Database:
 - I picked a relational database for this exercise because there were a lot of relationships between the data models. Member <-> committee, committee <-> subcommittee, etc, etc. I chose PostgreSql specifically for its ease of use and docker support.
@@ -36,6 +37,9 @@ git clone https://github.com/ricecrispy/clerk-data.git
 cd clerk-data
 docker compose up
 ```
+
+### Basic Usage
+After you get the containers running, open a web browser and navigate to http://localhost:5555/ to access the web UI. You can upload a XML file by inputting its url, and view any memberdata that is already in the database.
 
 ### Infrastructure
 
